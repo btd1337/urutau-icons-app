@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.18.3 -->
+<interface>
+  <requires lib="gtk+" version="3.0"/>
+  <object class="GtkWindow" id="main-window">
+    <property name="name">main-window</property>
+    <property name="width_request">350</property>
+    <property name="height_request">385</property>
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="title" translatable="yes">Urutau Icons</property>
+    <property name="resizable">False</property>
+    <property name="default_width">400</property>
+    <property name="default_height">500</property>
+    <signal name="destroy" handler="main_on_destroy" swapped="no"/>
+    <child>
+      <object class="GtkFixed" id="fixed1">
+        <property name="width_request">350</property>
+        <property name="height_request">385</property>
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <child>
+          <object class="GtkImage" id="img-logo">
+            <property name="width_request">128</property>
+            <property name="height_request">127</property>
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="pixbuf">logo.png</property>
+          </object>
+          <packing>
+            <property name="x">110</property>
+            <property name="y">20</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkSwitch" id="switch_enable">
+            <property name="width_request">52</property>
+            <property name="height_request">24</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="no_show_all">True</property>
+          </object>
+          <packing>
+            <property name="x">200</property>
+            <property name="y">210</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="lbl-enable">
+            <property name="width_request">100</property>
+            <property name="height_request">30</property>
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="no_show_all">True</property>
+            <property name="label" translatable="yes">Enable Theme</property>
+            <attributes>
+              <attribute name="style" value="normal"/>
+              <attribute name="weight" value="semibold"/>
+            </attributes>
+          </object>
+          <packing>
+            <property name="x">85</property>
+            <property name="y">210</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="btn-update">
+            <property name="label" translatable="yes">Update</property>
+            <property name="width_request">100</property>
+            <property name="height_request">25</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+          </object>
+          <packing>
+            <property name="x">220</property>
+            <property name="y">280</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="btn-submit">
+            <property name="label" translatable="yes">Submit Icons</property>
+            <property name="width_request">100</property>
+            <property name="height_request">25</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+          </object>
+          <packing>
+            <property name="x">95</property>
+            <property name="y">280</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="lbl-logo">
+            <property name="width_request">118</property>
+            <property name="height_request">40</property>
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes" context="Label Logo" comments="Label Logo">Urutau Icons</property>
+            <attributes>
+              <attribute name="font-desc" value="Raleway Light 15"/>
+              <attribute name="style" value="normal"/>
+            </attributes>
+          </object>
+          <packing>
+            <property name="x">115</property>
+            <property name="y">150</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkImage" id="img-tip">
+            <property name="width_request">24</property>
+            <property name="height_request">24</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="tooltip_text" translatable="yes">About elementary OS iconography</property>
+            <property name="stock">gtk-info</property>
+          </object>
+          <packing>
+            <property name="x">30</property>
+            <property name="y">280</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
