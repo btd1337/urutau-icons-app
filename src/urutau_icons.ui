@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.18.3 -->
 <interface>
-  <requires lib="gtk+" version="3.0"/>
+  <requires lib="gtk+" version="3.12"/>
+  <object class="GtkImage" id="img-tip">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-info</property>
+  </object>
   <object class="GtkWindow" id="main-window">
     <property name="name">main-window</property>
     <property name="width_request">350</property>
@@ -73,7 +78,7 @@
             <property name="receives_default">True</property>
           </object>
           <packing>
-            <property name="x">220</property>
+            <property name="x">210</property>
             <property name="y">280</property>
           </packing>
         </child>
@@ -85,9 +90,10 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
+            <property name="tooltip_text" translatable="yes">Open a new Issue or send a Pull Request for the Repository. It's necessary to send the icons in the following sizes: 16, 24, 32, 48, 64, 128px.</property>
           </object>
           <packing>
-            <property name="x">95</property>
+            <property name="x">80</property>
             <property name="y">280</property>
           </packing>
         </child>
@@ -109,13 +115,16 @@
           </packing>
         </child>
         <child>
-          <object class="GtkImage" id="img-tip">
+          <object class="GtkButton" id="btn-tip">
             <property name="width_request">24</property>
             <property name="height_request">24</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="tooltip_text" translatable="yes">About elementary OS iconography</property>
-            <property name="stock">gtk-info</property>
+            <property name="receives_default">True</property>
+            <property name="tooltip_text" translatable="yes">See more about the iconography of the elementary OS.</property>
+            <property name="image">img-tip</property>
+            <property name="relief">none</property>
+            <property name="always_show_image">True</property>
           </object>
           <packing>
             <property name="x">30</property>

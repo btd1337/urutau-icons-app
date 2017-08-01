@@ -26,6 +26,7 @@
 #include <string.h>
 #include <gtk/gtk.h>
 #include <stdio.h>
+#include <gio/gio.h>
 
 
 #define TYPE_MAIN (main_get_type ())
@@ -38,6 +39,8 @@
 typedef struct _Main Main;
 typedef struct _MainClass MainClass;
 typedef struct _MainPrivate MainPrivate;
+typedef struct _Block1Data Block1Data;
+#define _g_free0(var) (var = (g_free (var), NULL))
 #define _g_object_unref0(var) ((var == NULL) ? NULL : (var = (g_object_unref (var), NULL)))
 #define _g_error_free0(var) ((var == NULL) ? NULL : (var = (g_error_free (var), NULL)))
 
@@ -50,6 +53,14 @@ struct _MainClass {
 	GObjectClass parent_class;
 };
 
+struct _Block1Data {
+	int _ref_count_;
+	Main* self;
+	GtkSwitch* switch_enable;
+	GtkButton* btn_update;
+	gchar* cmd;
+};
+
 
 static gpointer main_parent_class = NULL;
 
@@ -60,8 +71,44 @@ enum  {
 #define MAIN_UI_FILE "src/urutau_icons.ui"
 Main* main_new (void);
 Main* main_construct (GType object_type);
+static Block1Data* block1_data_ref (Block1Data* _data1_);
+static void block1_data_unref (void * _userdata_);
+gchar* main_execute_system_command (Main* self, const gchar* cmd);
+gboolean main_checks_installed (Main* self);
+static void ___lambda4_ (Block1Data* _data1_);
+static void ____lambda4__g_object_notify (GObject* _sender, GParamSpec* pspec, gpointer self);
+static void ___lambda5_ (Block1Data* _data1_);
+gboolean main_update (Main* self);
+gboolean main_install (Main* self);
+static void ____lambda5__gtk_button_clicked (GtkButton* _sender, gpointer self);
+static void ___lambda6_ (Block1Data* _data1_);
+static void ____lambda6__gtk_button_clicked (GtkButton* _sender, gpointer self);
+static void ___lambda7_ (Block1Data* _data1_);
+static void ____lambda7__gtk_button_clicked (GtkButton* _sender, gpointer self);
 void main_on_destroy (GtkWidget* window, Main* self);
+gboolean main_checks_git_installed (Main* self);
 static gint main_main (gchar** args, int args_length1);
+
+
+static Block1Data* block1_data_ref (Block1Data* _data1_) {
+	g_atomic_int_inc (&_data1_->_ref_count_);
+	return _data1_;
+}
+
+
+static void block1_data_unref (void * _userdata_) {
+	Block1Data* _data1_;
+	_data1_ = (Block1Data*) _userdata_;
+	if (g_atomic_int_dec_and_test (&_data1_->_ref_count_)) {
+		Main* self;
+		self = _data1_->self;
+		_g_free0 (_data1_->cmd);
+		_g_object_unref0 (_data1_->btn_update);
+		_g_object_unref0 (_data1_->switch_enable);
+		_g_object_unref0 (self);
+		g_slice_free (Block1Data, _data1_);
+	}
+}
 
 
 static gpointer _g_object_ref0 (gpointer self) {
@@ -69,35 +116,108 @@ static gpointer _g_object_ref0 (gpointer self) {
 }
 
 
-Main* main_construct (GType object_type) {
-	Main * self = NULL;
-	GError * _inner_error_ = NULL;
-	self = (Main*) g_object_new (object_type, NULL);
-	{
-		GtkBuilder* builder = NULL;
-		GtkBuilder* _tmp0_ = NULL;
-		GtkWindow* window = NULL;
-		GObject* _tmp1_ = NULL;
-		GtkWindow* _tmp2_ = NULL;
-		GtkWindow* _tmp3_ = NULL;
-		_tmp0_ = gtk_builder_new ();
-		builder = _tmp0_;
-		gtk_builder_add_from_file (builder, MAIN_UI_FILE, &_inner_error_);
-		if (G_UNLIKELY (_inner_error_ != NULL)) {
-			_g_object_unref0 (builder);
-			goto __catch0_g_error;
-		}
-		gtk_builder_connect_signals (builder, self);
-		_tmp1_ = gtk_builder_get_object (builder, "main-window");
-		_tmp2_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp1_, gtk_window_get_type ()) ? ((GtkWindow*) _tmp1_) : NULL);
-		window = _tmp2_;
-		_tmp3_ = window;
-		gtk_widget_show_all ((GtkWidget*) _tmp3_);
-		_g_object_unref0 (window);
-		_g_object_unref0 (builder);
+static gboolean string_contains (const gchar* self, const gchar* needle) {
+	gboolean result = FALSE;
+	const gchar* _tmp0_ = NULL;
+	gchar* _tmp1_ = NULL;
+	g_return_val_if_fail (self != NULL, FALSE);
+	g_return_val_if_fail (needle != NULL, FALSE);
+	_tmp0_ = needle;
+	_tmp1_ = strstr ((gchar*) self, (gchar*) _tmp0_);
+	result = _tmp1_ != NULL;
+	return result;
+}
+
+
+static void ___lambda4_ (Block1Data* _data1_) {
+	Main* self;
+	GtkSwitch* _tmp0_ = NULL;
+	gboolean _tmp1_ = FALSE;
+	gboolean _tmp2_ = FALSE;
+	self = _data1_->self;
+	_tmp0_ = _data1_->switch_enable;
+	_tmp1_ = gtk_switch_get_active (_tmp0_);
+	_tmp2_ = _tmp1_;
+	if (_tmp2_) {
+		gchar* _tmp3_ = NULL;
+		const gchar* _tmp4_ = NULL;
+		gchar* _tmp5_ = NULL;
+		gchar* _tmp6_ = NULL;
+		FILE* _tmp7_ = NULL;
+		_tmp3_ = g_strdup ("gsettings set org.gnome.desktop.interface icon-theme 'urutau-icons'");
+		_g_free0 (_data1_->cmd);
+		_data1_->cmd = _tmp3_;
+		_tmp4_ = _data1_->cmd;
+		_tmp5_ = main_execute_system_command (self, _tmp4_);
+		_tmp6_ = _tmp5_;
+		_g_free0 (_tmp6_);
+		_tmp7_ = stdout;
+		fprintf (_tmp7_, "Theme urutau-icons applied\n");
+	} else {
+		gchar* _tmp8_ = NULL;
+		const gchar* _tmp9_ = NULL;
+		gchar* _tmp10_ = NULL;
+		gchar* _tmp11_ = NULL;
+		FILE* _tmp12_ = NULL;
+		_tmp8_ = g_strdup ("gsettings set org.gnome.desktop.interface icon-theme 'elementary'");
+		_g_free0 (_data1_->cmd);
+		_data1_->cmd = _tmp8_;
+		_tmp9_ = _data1_->cmd;
+		_tmp10_ = main_execute_system_command (self, _tmp9_);
+		_tmp11_ = _tmp10_;
+		_g_free0 (_tmp11_);
+		_tmp12_ = stdout;
+		fprintf (_tmp12_, "Theme elementary applied\n");
 	}
-	goto __finally0;
-	__catch0_g_error:
+}
+
+
+static void ____lambda4__g_object_notify (GObject* _sender, GParamSpec* pspec, gpointer self) {
+	___lambda4_ (self);
+}
+
+
+static void ___lambda5_ (Block1Data* _data1_) {
+	Main* self;
+	GtkButton* _tmp0_ = NULL;
+	const gchar* _tmp1_ = NULL;
+	const gchar* _tmp2_ = NULL;
+	self = _data1_->self;
+	_tmp0_ = _data1_->btn_update;
+	_tmp1_ = gtk_button_get_label (_tmp0_);
+	_tmp2_ = _tmp1_;
+	if (g_strcmp0 (_tmp2_, "Update") == 0) {
+		main_update (self);
+	} else {
+		main_install (self);
+	}
+}
+
+
+static void ____lambda5__gtk_button_clicked (GtkButton* _sender, gpointer self) {
+	___lambda5_ (self);
+}
+
+
+static void ___lambda6_ (Block1Data* _data1_) {
+	Main* self;
+	GError * _inner_error_ = NULL;
+	self = _data1_->self;
+	{
+		gchar* _tmp0_ = NULL;
+		const gchar* _tmp1_ = NULL;
+		gchar* _tmp2_ = NULL;
+		gchar* _tmp3_ = NULL;
+		_tmp0_ = g_strdup ("sensible-browser  https://github.com/btd1337/urutau-icons/issues &");
+		_g_free0 (_data1_->cmd);
+		_data1_->cmd = _tmp0_;
+		_tmp1_ = _data1_->cmd;
+		_tmp2_ = main_execute_system_command (self, _tmp1_);
+		_tmp3_ = _tmp2_;
+		_g_free0 (_tmp3_);
+	}
+	goto __finally1;
+	__catch1_g_error:
 	{
 		GError* e = NULL;
 		FILE* _tmp4_ = NULL;
@@ -108,7 +228,190 @@ Main* main_construct (GType object_type) {
 		_tmp4_ = stderr;
 		_tmp5_ = e;
 		_tmp6_ = _tmp5_->message;
-		fprintf (_tmp4_, "Could not load UI: %s\n", _tmp6_);
+		fprintf (_tmp4_, "Error opening browser: %s\n", _tmp6_);
+		_g_error_free0 (e);
+	}
+	__finally1:
+	if (G_UNLIKELY (_inner_error_ != NULL)) {
+		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
+		g_clear_error (&_inner_error_);
+		return;
+	}
+}
+
+
+static void ____lambda6__gtk_button_clicked (GtkButton* _sender, gpointer self) {
+	___lambda6_ (self);
+}
+
+
+static void ___lambda7_ (Block1Data* _data1_) {
+	Main* self;
+	gchar* _tmp0_ = NULL;
+	const gchar* _tmp1_ = NULL;
+	gchar* _tmp2_ = NULL;
+	gchar* _tmp3_ = NULL;
+	self = _data1_->self;
+	_tmp0_ = g_strdup ("sensible-browser  https://elementary.io/docs/human-interface-guideline" \
+"s#iconography &");
+	_g_free0 (_data1_->cmd);
+	_data1_->cmd = _tmp0_;
+	_tmp1_ = _data1_->cmd;
+	_tmp2_ = main_execute_system_command (self, _tmp1_);
+	_tmp3_ = _tmp2_;
+	_g_free0 (_tmp3_);
+}
+
+
+static void ____lambda7__gtk_button_clicked (GtkButton* _sender, gpointer self) {
+	___lambda7_ (self);
+}
+
+
+Main* main_construct (GType object_type) {
+	Main * self = NULL;
+	GError * _inner_error_ = NULL;
+	self = (Main*) g_object_new (object_type, NULL);
+	{
+		Block1Data* _data1_;
+		GtkBuilder* builder = NULL;
+		GtkBuilder* _tmp0_ = NULL;
+		GtkWindow* window = NULL;
+		GObject* _tmp1_ = NULL;
+		GtkWindow* _tmp2_ = NULL;
+		GObject* _tmp3_ = NULL;
+		GtkSwitch* _tmp4_ = NULL;
+		GtkLabel* lbl_enable = NULL;
+		GObject* _tmp5_ = NULL;
+		GtkLabel* _tmp6_ = NULL;
+		GObject* _tmp7_ = NULL;
+		GtkButton* _tmp8_ = NULL;
+		GtkButton* btn_tip = NULL;
+		GObject* _tmp9_ = NULL;
+		GtkButton* _tmp10_ = NULL;
+		GtkButton* btn_submit = NULL;
+		GObject* _tmp11_ = NULL;
+		GtkButton* _tmp12_ = NULL;
+		gchar* _tmp13_ = NULL;
+		const gchar* _tmp14_ = NULL;
+		gchar* _tmp15_ = NULL;
+		gchar* _tmp16_ = NULL;
+		gboolean _tmp17_ = FALSE;
+		const gchar* _tmp24_ = NULL;
+		gchar* _tmp25_ = NULL;
+		gchar* _tmp26_ = NULL;
+		gboolean _tmp27_ = FALSE;
+		gboolean _tmp28_ = FALSE;
+		GtkSwitch* _tmp31_ = NULL;
+		GtkButton* _tmp32_ = NULL;
+		GtkButton* _tmp33_ = NULL;
+		GtkButton* _tmp34_ = NULL;
+		GtkWindow* _tmp35_ = NULL;
+		_data1_ = g_slice_new0 (Block1Data);
+		_data1_->_ref_count_ = 1;
+		_data1_->self = g_object_ref (self);
+		_tmp0_ = gtk_builder_new ();
+		builder = _tmp0_;
+		gtk_builder_add_from_file (builder, MAIN_UI_FILE, &_inner_error_);
+		if (G_UNLIKELY (_inner_error_ != NULL)) {
+			_g_object_unref0 (builder);
+			block1_data_unref (_data1_);
+			_data1_ = NULL;
+			goto __catch0_g_error;
+		}
+		gtk_builder_connect_signals (builder, self);
+		_tmp1_ = gtk_builder_get_object (builder, "main-window");
+		_tmp2_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp1_, gtk_window_get_type ()) ? ((GtkWindow*) _tmp1_) : NULL);
+		window = _tmp2_;
+		_tmp3_ = gtk_builder_get_object (builder, "switch_enable");
+		_tmp4_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp3_, gtk_switch_get_type ()) ? ((GtkSwitch*) _tmp3_) : NULL);
+		_data1_->switch_enable = _tmp4_;
+		_tmp5_ = gtk_builder_get_object (builder, "lbl-enable");
+		_tmp6_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp5_, gtk_label_get_type ()) ? ((GtkLabel*) _tmp5_) : NULL);
+		lbl_enable = _tmp6_;
+		_tmp7_ = gtk_builder_get_object (builder, "btn-update");
+		_tmp8_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp7_, gtk_button_get_type ()) ? ((GtkButton*) _tmp7_) : NULL);
+		_data1_->btn_update = _tmp8_;
+		_tmp9_ = gtk_builder_get_object (builder, "btn-tip");
+		_tmp10_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp9_, gtk_button_get_type ()) ? ((GtkButton*) _tmp9_) : NULL);
+		btn_tip = _tmp10_;
+		_tmp11_ = gtk_builder_get_object (builder, "btn-submit");
+		_tmp12_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp11_, gtk_button_get_type ()) ? ((GtkButton*) _tmp11_) : NULL);
+		btn_submit = _tmp12_;
+		_tmp13_ = g_strdup ("gsettings get org.gnome.desktop.interface icon-theme");
+		_data1_->cmd = _tmp13_;
+		_tmp14_ = _data1_->cmd;
+		_tmp15_ = main_execute_system_command (self, _tmp14_);
+		_tmp16_ = _tmp15_;
+		_g_free0 (_tmp16_);
+		_tmp17_ = main_checks_installed (self);
+		if (_tmp17_) {
+			GtkButton* _tmp18_ = NULL;
+			GtkSwitch* _tmp19_ = NULL;
+			GtkLabel* _tmp20_ = NULL;
+			_tmp18_ = _data1_->btn_update;
+			gtk_button_set_label (_tmp18_, "Update");
+			_tmp19_ = _data1_->switch_enable;
+			gtk_widget_set_visible ((GtkWidget*) _tmp19_, TRUE);
+			_tmp20_ = lbl_enable;
+			gtk_widget_set_visible ((GtkWidget*) _tmp20_, TRUE);
+		} else {
+			GtkButton* _tmp21_ = NULL;
+			GtkSwitch* _tmp22_ = NULL;
+			GtkLabel* _tmp23_ = NULL;
+			_tmp21_ = _data1_->btn_update;
+			gtk_button_set_label (_tmp21_, "Install");
+			_tmp22_ = _data1_->switch_enable;
+			gtk_widget_set_visible ((GtkWidget*) _tmp22_, FALSE);
+			_tmp23_ = lbl_enable;
+			gtk_widget_set_visible ((GtkWidget*) _tmp23_, FALSE);
+		}
+		_tmp24_ = _data1_->cmd;
+		_tmp25_ = main_execute_system_command (self, _tmp24_);
+		_tmp26_ = _tmp25_;
+		_tmp27_ = string_contains (_tmp26_, "urutau-icons");
+		_tmp28_ = _tmp27_;
+		_g_free0 (_tmp26_);
+		if (_tmp28_) {
+			GtkSwitch* _tmp29_ = NULL;
+			_tmp29_ = _data1_->switch_enable;
+			gtk_switch_set_active (_tmp29_, TRUE);
+		} else {
+			GtkSwitch* _tmp30_ = NULL;
+			_tmp30_ = _data1_->switch_enable;
+			gtk_switch_set_active (_tmp30_, FALSE);
+		}
+		_tmp31_ = _data1_->switch_enable;
+		g_signal_connect_data ((GObject*) _tmp31_, "notify::active", (GCallback) ____lambda4__g_object_notify, block1_data_ref (_data1_), (GClosureNotify) block1_data_unref, 0);
+		_tmp32_ = _data1_->btn_update;
+		g_signal_connect_data (_tmp32_, "clicked", (GCallback) ____lambda5__gtk_button_clicked, block1_data_ref (_data1_), (GClosureNotify) block1_data_unref, 0);
+		_tmp33_ = btn_submit;
+		g_signal_connect_data (_tmp33_, "clicked", (GCallback) ____lambda6__gtk_button_clicked, block1_data_ref (_data1_), (GClosureNotify) block1_data_unref, 0);
+		_tmp34_ = btn_tip;
+		g_signal_connect_data (_tmp34_, "clicked", (GCallback) ____lambda7__gtk_button_clicked, block1_data_ref (_data1_), (GClosureNotify) block1_data_unref, 0);
+		_tmp35_ = window;
+		gtk_widget_show_all ((GtkWidget*) _tmp35_);
+		_g_object_unref0 (btn_submit);
+		_g_object_unref0 (btn_tip);
+		_g_object_unref0 (lbl_enable);
+		_g_object_unref0 (window);
+		_g_object_unref0 (builder);
+		block1_data_unref (_data1_);
+		_data1_ = NULL;
+	}
+	goto __finally0;
+	__catch0_g_error:
+	{
+		GError* e = NULL;
+		FILE* _tmp36_ = NULL;
+		GError* _tmp37_ = NULL;
+		const gchar* _tmp38_ = NULL;
+		e = _inner_error_;
+		_inner_error_ = NULL;
+		_tmp36_ = stderr;
+		_tmp37_ = e;
+		_tmp38_ = _tmp37_->message;
+		fprintf (_tmp36_, "Could not load UI: %s\n", _tmp38_);
 		_g_error_free0 (e);
 	}
 	__finally0:
@@ -130,6 +433,175 @@ void main_on_destroy (GtkWidget* window, Main* self) {
 	g_return_if_fail (self != NULL);
 	g_return_if_fail (window != NULL);
 	gtk_main_quit ();
+}
+
+
+gboolean main_checks_installed (Main* self) {
+	gboolean result = FALSE;
+	GFile* file = NULL;
+	GFile* _tmp0_ = NULL;
+	GFile* _tmp1_ = NULL;
+	gboolean _tmp2_ = FALSE;
+	g_return_val_if_fail (self != NULL, FALSE);
+	_tmp0_ = g_file_new_for_path ("/usr/share/icons/urutau-icons");
+	file = _tmp0_;
+	_tmp1_ = file;
+	_tmp2_ = g_file_query_exists (_tmp1_, NULL);
+	if (_tmp2_) {
+		result = TRUE;
+		_g_object_unref0 (file);
+		return result;
+	} else {
+		result = FALSE;
+		_g_object_unref0 (file);
+		return result;
+	}
+	_g_object_unref0 (file);
+}
+
+
+gboolean main_checks_git_installed (Main* self) {
+	gboolean result = FALSE;
+	g_return_val_if_fail (self != NULL, FALSE);
+	result = TRUE;
+	return result;
+}
+
+
+gboolean main_update (Main* self) {
+	gboolean result = FALSE;
+	gboolean _tmp6_ = FALSE;
+	GError * _inner_error_ = NULL;
+	g_return_val_if_fail (self != NULL, FALSE);
+	{
+		gchar* cmd = NULL;
+		gchar* _tmp0_ = NULL;
+		gchar* _tmp1_ = NULL;
+		gchar* _tmp2_ = NULL;
+		_tmp0_ = g_strdup ("pkexec git -C /usr/share/icons/urutau-icons pull");
+		cmd = _tmp0_;
+		_tmp1_ = main_execute_system_command (self, cmd);
+		_tmp2_ = _tmp1_;
+		_g_free0 (_tmp2_);
+		result = TRUE;
+		_g_free0 (cmd);
+		return result;
+	}
+	goto __finally2;
+	__catch2_g_error:
+	{
+		GError* e = NULL;
+		FILE* _tmp3_ = NULL;
+		GError* _tmp4_ = NULL;
+		const gchar* _tmp5_ = NULL;
+		e = _inner_error_;
+		_inner_error_ = NULL;
+		_tmp3_ = stderr;
+		_tmp4_ = e;
+		_tmp5_ = _tmp4_->message;
+		fprintf (_tmp3_, "Update Error: %s\n", _tmp5_);
+		result = FALSE;
+		_g_error_free0 (e);
+		return result;
+	}
+	__finally2:
+	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
+	g_clear_error (&_inner_error_);
+	return _tmp6_;
+}
+
+
+gboolean main_install (Main* self) {
+	gboolean result = FALSE;
+	gboolean _tmp6_ = FALSE;
+	GError * _inner_error_ = NULL;
+	g_return_val_if_fail (self != NULL, FALSE);
+	{
+		gchar* cmd = NULL;
+		gchar* _tmp0_ = NULL;
+		gchar* _tmp1_ = NULL;
+		gchar* _tmp2_ = NULL;
+		_tmp0_ = g_strdup ("pkexec git clone https://github.com/btd1337/urutau-icons /usr/share/ic" \
+"ons/");
+		cmd = _tmp0_;
+		_tmp1_ = main_execute_system_command (self, cmd);
+		_tmp2_ = _tmp1_;
+		_g_free0 (_tmp2_);
+		result = TRUE;
+		_g_free0 (cmd);
+		return result;
+	}
+	goto __finally3;
+	__catch3_g_error:
+	{
+		GError* e = NULL;
+		FILE* _tmp3_ = NULL;
+		GError* _tmp4_ = NULL;
+		const gchar* _tmp5_ = NULL;
+		e = _inner_error_;
+		_inner_error_ = NULL;
+		_tmp3_ = stderr;
+		_tmp4_ = e;
+		_tmp5_ = _tmp4_->message;
+		fprintf (_tmp3_, "Installation Error: %s\n", _tmp5_);
+		result = FALSE;
+		_g_error_free0 (e);
+		return result;
+	}
+	__finally3:
+	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
+	g_clear_error (&_inner_error_);
+	return _tmp6_;
+}
+
+
+gchar* main_execute_system_command (Main* self, const gchar* cmd) {
+	gchar* result = NULL;
+	gint exitCode = 0;
+	gchar* std_out = NULL;
+	GError * _inner_error_ = NULL;
+	g_return_val_if_fail (self != NULL, NULL);
+	g_return_val_if_fail (cmd != NULL, NULL);
+	{
+		const gchar* _tmp0_ = NULL;
+		gchar* _tmp1_ = NULL;
+		gint _tmp2_ = 0;
+		_tmp0_ = cmd;
+		g_spawn_command_line_sync (_tmp0_, &_tmp1_, NULL, &_tmp2_, &_inner_error_);
+		_g_free0 (std_out);
+		std_out = _tmp1_;
+		exitCode = _tmp2_;
+		if (G_UNLIKELY (_inner_error_ != NULL)) {
+			goto __catch4_g_error;
+		}
+		result = std_out;
+		return result;
+	}
+	goto __finally4;
+	__catch4_g_error:
+	{
+		GError* e = NULL;
+		FILE* _tmp3_ = NULL;
+		GError* _tmp4_ = NULL;
+		const gchar* _tmp5_ = NULL;
+		gchar* _tmp6_ = NULL;
+		e = _inner_error_;
+		_inner_error_ = NULL;
+		_tmp3_ = stderr;
+		_tmp4_ = e;
+		_tmp5_ = _tmp4_->message;
+		fprintf (_tmp3_, "Error: %s\n", _tmp5_);
+		_tmp6_ = g_strdup ("error");
+		result = _tmp6_;
+		_g_error_free0 (e);
+		_g_free0 (std_out);
+		return result;
+	}
+	__finally4:
+	_g_free0 (std_out);
+	g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
+	g_clear_error (&_inner_error_);
+	return NULL;
 }
 
 

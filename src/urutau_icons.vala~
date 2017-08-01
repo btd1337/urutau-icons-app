@@ -47,13 +47,12 @@ public class Main : Object
 			var switch_enable = builder.get_object ("switch_enable") as Switch;
 			var lbl_enable = builder.get_object ("lbl-enable") as Label;
 			var btn_update = builder.get_object ("btn-update") as Button;
-			var img_tip = builder.get_object ("img-tip") as Image;
+			var btn_tip = builder.get_object ("btn-tip") as Button;
+			var btn_submit = builder.get_object ("btn-submit") as Button;
 		
-			int exitCode;
-    		string std_out;
 			string cmd = "gsettings get org.gnome.desktop.interface icon-theme";
-			Process.spawn_command_line_sync(cmd, out std_out, null, out exitCode);		
-
+			execute_system_command (cmd);
+		
 			if(checks_installed ()) {
 				btn_update.label = "Update";
 				switch_enable.set_visible (true);
@@ -66,7 +65,7 @@ public class Main : Object
 			}
 
 
-			if("urutau-icons" in std_out){
+			if("urutau-icons" in execute_system_command (cmd)){
 				switch_enable.set_active(true);
 			}else {
 				switch_enable.set_active (false);
@@ -74,10 +73,12 @@ public class Main : Object
 
 			switch_enable.notify["active"].connect (() => {
 				if (switch_enable.active) {
-					Posix.system("gsettings set org.gnome.desktop.interface icon-theme 'urutau-icons'");
-    				stdout.printf("Theme urutau-icons applied\n");
+					cmd = "gsettings set org.gnome.desktop.interface icon-theme 'urutau-icons'";
+					execute_system_command (cmd);
+					stdout.printf("Theme urutau-icons applied\n");
 				} else {
-					Posix.system("gsettings set org.gnome.desktop.interface icon-theme 'elementary'");
+					cmd = "gsettings set org.gnome.desktop.interface icon-theme 'elementary'";
+					execute_system_command (cmd);
 					stdout.printf("Theme elementary applied\n");
 				}
 			});
@@ -88,7 +89,23 @@ public class Main : Object
 				} else {
 					install();
 				}
-			}); 
+			});
+
+			btn_submit.clicked.connect (() => {
+				try{
+					cmd = "sensible-browser  https://github.com/btd1337/urutau-icons/issues &";
+					execute_system_command (cmd);
+				} catch (Error e) {
+					stderr.printf ("Error opening browser: %s\n", e.message);
+				}
+			});
+		
+			btn_tip.clicked.connect (() => {
+				cmd = "sensible-browser  https://elementary.io/docs/human-interface-guidelines#iconography &";
+				execute_system_command (cmd);
+				stderr.printf ("Error opening browser: %s\n", e.message);
+			});
+			
 			window.show_all ();
 		
 		} 
@@ -121,10 +138,8 @@ public class Main : Object
 
 	public bool update () {
 		try {
-			int exitCode;
-			string std_out;
 			string cmd = "pkexec git -C /usr/share/icons/urutau-icons pull";
-			Process.spawn_command_line_sync(cmd, out std_out, null, out exitCode);
+			execute_system_command (cmd);
 			return true;
 		} catch(Error e) { 
 			stderr.printf ("Update Error: %s\n", e.message);
@@ -134,15 +149,25 @@ public class Main : Object
 
 	 public bool install () {
 		 try {
-			int exitCode;
-			string std_out;
 			string cmd = "pkexec git clone https://github.com/btd1337/urutau-icons /usr/share/icons/";
-			Process.spawn_command_line_sync(cmd, out std_out, null, out exitCode);
+			execute_system_command (cmd);
 			return true;
 
 		} catch(Error e) { 
 			stderr.printf ("Installation Error: %s\n", e.message);
 			return false;
+		}
+	 }
+
+	 public string execute_system_command (string cmd) {
+		int exitCode;
+		string std_out;
+		try{
+			Process.spawn_command_line_sync(cmd, out std_out, null, out exitCode);
+			return std_out;
+		} catch (Error e) { 
+			stderr.printf ("Error: %s\n", e.message);
+			return "error";
 		}
 	 }
 	 
