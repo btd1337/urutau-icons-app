@@ -1,4 +1,5 @@
+*~
 .anjuta/
 .anjuta_sym_db.db
 autom4te.cache
-*~
+build/
