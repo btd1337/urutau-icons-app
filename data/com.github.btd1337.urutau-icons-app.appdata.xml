@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2017 Helder Bertoldo <helder.bertoldo@gmail.com> -->
+<component type="desktop">
+  <id>com.github.btd1337.urutau-icons-app.desktop</id>
+  <metadata_license>GPL3</metadata_license>
+  <name>Urutau Icons</name>
+  <summary>Keep elementary with elementary style</summary>
+  <description>
+    <p>A package of icons that transforms the third-party icons with the elementary appearance.</p>
+  </description>
+  ​<categories>
+​    <category>Utility</category>
+​    <category>Settings</category>
+​</categories>
+<custom>
+        <value key="x-appcenter-color-primary">#A67A51</value>
+        <value key="x-appcenter-color-primary-text">rgb(255,255,255)</value>
+        <value key="x-appcenter-suggested-price">2</value>
+    </custom>
+    <developer_name>Helder Bertoldo</developer_name>
+    <url type="homepage">https://github.com/btd1337/urutau-icons-app</url>
+    <url type="bugtracker">https://github.com/btd1337/urutau-icons-app/issues</url>
+    <url type="help">https://github.com/btd1337/urutau-icons-app/issues</url>
+    <update_contact>helder.bertoldo@gmail.com</update_contact>
+    <screenshots>
+        <screenshot type="default">
+            <image>https://raw.githubusercontent.com/btd1337/elementary-full-icon-theme/master/preview/img1.jpeg</image>
+            <image>https://raw.githubusercontent.com/btd1337/elementary-full-icon-theme/master/preview/img2.jpeg</image>
+            <image>https://raw.githubusercontent.com/btd1337/elementary-full-icon-theme/master/preview/img3.jpeg</image>
+            <image>https://raw.githubusercontent.com/btd1337/elementary-full-icon-theme/master/preview/img4.jpeg</image>
+        </screenshot>
+    </screenshots>
+</component>
