@@ -1,3 +1,0 @@
-# Hashes of file build rules.
-f8d7521208a53520b254a1f86f25dc94 com.github.btd1337.urutau-icons-app_valac.stamp
-4e0aa04ecd6fb2f574ea194055e55240 src/urutau_icons.c
