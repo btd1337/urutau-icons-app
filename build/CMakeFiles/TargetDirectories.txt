@@ -1,0 +1,7 @@
+/home/helder/Repositórios/urutau-icons-app/build/CMakeFiles/rebuild_cache.dir
+/home/helder/Repositórios/urutau-icons-app/build/CMakeFiles/install.dir
+/home/helder/Repositórios/urutau-icons-app/build/CMakeFiles/list_install_components.dir
+/home/helder/Repositórios/urutau-icons-app/build/CMakeFiles/com.github.btd1337.urutau-icons-app.dir
+/home/helder/Repositórios/urutau-icons-app/build/CMakeFiles/install/strip.dir
+/home/helder/Repositórios/urutau-icons-app/build/CMakeFiles/install/local.dir
+/home/helder/Repositórios/urutau-icons-app/build/CMakeFiles/edit_cache.dir

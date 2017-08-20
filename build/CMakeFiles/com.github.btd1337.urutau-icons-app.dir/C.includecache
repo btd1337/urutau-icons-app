@@ -1,0 +1,24 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/helder/Repositórios/urutau-icons-app/build/src/urutau_icons.c
+glib.h
+-
+glib-object.h
+-
+stdlib.h
+-
+string.h
+-
+gtk/gtk.h
+-
+stdio.h
+-
+gio/gio.h
+-
+

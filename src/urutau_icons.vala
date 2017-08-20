@@ -28,7 +28,7 @@ public class Main : Object
 	 * or installing
 	 */
 	//const string UI_FILE = Config.PACKAGE_DATA_DIR + "/ui/" + "urutau_icons.ui";
-	const string UI_FILE = "src/urutau_icons.ui";
+	const string UI_FILE = "/usr/share/com.github.btd1337.urutau-icons-app/urutau_icons.ui";
 
 	/* ANJUTA: Widgets declaration for urutau_icons.ui - DO NOT REMOVE */
 

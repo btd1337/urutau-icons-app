@@ -1,0 +1,5 @@
+/usr/bin/com.github.btd1337.urutau-icons-app
+/usr/share/applications/com.github.btd1337.urutau-icons-app.desktop
+/usr/share/metainfo/com.github.btd1337.urutau-icons-app.appdata.xml
+/usr/share/com.github.btd1337.urutau-icons-app/urutau_icons.ui
+/usr/share/com.github.btd1337.urutau-icons-app/logo.png
