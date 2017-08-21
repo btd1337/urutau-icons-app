@@ -3,3 +3,9 @@
 .anjuta_sym_db.db
 autom4te.cache
 build/
+debian/com.github.btd1337.urutau-icons-app.debhelper.log
+debian/com.github.btd1337.urutau-icons-app.substvars
+debian/com.github.btd1337.urutau-icons-app/
+debian/debhelper-build-stamp
+obj-x86_64-linux-gnu/
+src/urutau_icons
