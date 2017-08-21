@@ -148,7 +148,7 @@ public class Main : Object
 
 	 public bool install () {
 		 try {
-			string cmd = "pkexec git clone https://github.com/btd1337/urutau-icons /usr/share/icons/";
+			string cmd = "pkexec git clone https://github.com/btd1337/urutau-icons /usr/share/icons/urutau-icons";
 			execute_system_command (cmd);
 			return true;
 
