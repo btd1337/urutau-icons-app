@@ -11,6 +11,9 @@
     # where we install data directory (if we have any)
     set (DATADIR "${CMAKE_INSTALL_PREFIX}/share")
 
+    # where install icons
+    set (ICONSDIR "/usr/share/icons/hicolor/")
+
     # what to call that directory where we install data too
     set (PKGDATADIR "${DATADIR}/com.github.btd1337.urutau-icons-app")
 
@@ -62,3 +65,17 @@
     
     # install assets
     install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/logo.png DESTINATION ${PKGDATADIR}/)
+
+    # install icons
+    install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/data/icons/16/urutau-icons.svg DESTINATION ${ICONSDIR}/16x16/apps/)
+    install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/data/icons/24/urutau-icons.svg DESTINATION ${ICONSDIR}/24x24/apps/)
+    install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/data/icons/32/urutau-icons.svg DESTINATION ${ICONSDIR}/32x32/apps/)
+    install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/data/icons/48/urutau-icons.svg DESTINATION ${ICONSDIR}/48x48/apps/)
+    install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/data/icons/64/urutau-icons.svg DESTINATION ${ICONSDIR}/64x64/apps/)
+    install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/data/icons/128/urutau-icons.svg DESTINATION ${ICONSDIR}/128x128/apps/)
+
+    option (ICON_UPDATE "Run gtk-update-icon-cache after the install." ON)
+    if (ICON_UPDATE)
+      install (CODE "message(\"-- Updating icon cache...\")")
+      install (CODE "execute_process(COMMAND gtk-update-icon-cache -f -t ${CMAKE_INSTALL_PREFIX}/share/icons/hicolor)")
+    endif (ICON_UPDATE)
