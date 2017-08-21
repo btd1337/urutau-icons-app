@@ -1,6 +1,7 @@
 <p align="center">
   <img src="https://raw.githubusercontent.com/btd1337/elementary-full-icon-theme/master/logo.png"><br>
-  <b>Urutau Icons</b><br><br>
+  <b>Urutau Icons APP</b><br><br>
+  This app is a GUI for the icon pack Urutau Icons:<br>
   A package of icons that transforms the third-party icons with the elementary appearance.<br><br>
 </p>
 
@@ -14,30 +15,10 @@
 
 ## Installation:
 
-### First Installation?
-
-Install Git if you don't already have it installed.
-
-    $ sudo apt install git
-
-Clone the repository (or download files):  
-
-    $ sudo git clone https://github.com/btd1337/urutau-icons /tmp
-    $ sudo mv /tmp/urutau-icons/files /usr/share/icons/urutau-icons
-
-Set theme:  
-
-    $ gsettings set org.gnome.desktop.interface icon-theme "urutau-icons"
-
-### Update?
-
-    $ cd /usr/share/icons/urutau-icons
-    $ sudo git pull
-
-### Uninstall?
-
-    $ gsettings set org.gnome.desktop.interface icon-theme "elementary"
-    $ sudo rm -R /usr/share/icons/urutau-icons
+    $ mkdir build && cd build
+    $ cmake -DCMAKE_INSTALL_PREFIX=/usr ../
+    $ make
+    $ sudo make install
 
 ### Donate
 
