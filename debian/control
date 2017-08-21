@@ -10,6 +10,6 @@ Standards-Version: 3.9.3
 
 Package: com.github.btd1337.urutau-icons-app
 Architecture: any
-Depends: ${misc:Depends}, ${shlibs:Depends}
+Depends: ${misc:Depends}, ${shlibs:Depends}, git (>=2.0)
 Description: Keep elementary with elementary style
  A package of icons that transforms the third-party icons with the elementary appearance.

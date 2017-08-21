@@ -1,0 +1,29 @@
+#!/bin/sh
+set -e
+
+case "$1" in
+    install)
+        # do some magic
+
+        echo "Downloading the icon-pack files.\n"
+        wget https://codeload.github.com/btd1337/urutau-icons/zip/master -P /tmp 
+        echo "Unzipping files...."
+        unzip /tmp/master -d /usr/share/icons
+        mv /usr/share/icons/urutau-icons-master /usr/share/icons/urutau-icons
+
+        echo "Updating icon cache...\n"
+        gtk-update-icon-cache -f -t /usr/share/icons/hicolor
+        ;;
+
+    upgrade|abort-upgrade)
+        ;;
+
+    *)
+        echo "postinst called with unknown argument \`$1'" >&2
+        exit 0
+        ;;
+esac
+
+#DEBHELPER#
+
+exit 0
